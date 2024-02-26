@@ -1,0 +1,46 @@
+4
+Safety
+WARNING: this section contains examples of text that may be considered unsafe, offensive, or upsetting.
+In this section, we dive deeper into the important topic of safety measurements and mitigations. We first
+discuss our safety investigations into pretraining data and pretrained models (Section 4.1). Next, we describe
+the process of our safety alignment (Section 4.2), explaining how we collected safety-related annotations and
+utilized SFT and RLHF, and present experimental results. Then, we discuss the red teaming we performed to
+further understand and improve model safety (Section 4.3). Finally, we present quantitative safety evaluations
+of Llama 2-Chat (Section 4.4). We also share a model card in the Appendix, in Table 52.
+4.1
+Safety in Pretraining
+It is important to understand what is in the pretraining data both to increase transparency and to shed
+light on root causes of potential downstream issues, such as potential biases. This can inform what, if any,
+enhanced by prefixing the model with a safety preprompt (e.g., “You are a safe and responsible assistant”).
+Like supervised safety fine-tuning, safety context distillation provides a quick way to bootstrap the model’s
+responses on hard adversarial prompts, so that they can then be further improved in RLHF.
+Specifically, we apply context distillation by prefixing a safety preprompt to adversarial prompts to generate
+safer responses, and then fine-tune the model on its own safe output given the adversarial prompt without
+the preprompt. We generate safety preprompts automatically with templates. In particular, we use various
+adjectives usually associated with safe behavior such as “responsible,” “respectful’,’ or “wise,” with the intuition
+that the model associates them with positive traits that we want to see reflected in safe answers. We show
+examples of safety preprompts in Appendix Table 39.
+Context Distillation with Answer Templates
+the model to align with our safety guidelines even before RLHF, and thus lays the foundation for
+high-quality human preference data annotation.
+2. Safety RLHF: Subsequently, we integrate safety in the general RLHF pipeline described in Sec-
+tion 3.2.2. This includes training a safety-specific reward model and gathering more challenging
+adversarial prompts for rejection sampling style fine-tuning and PPO optimization.
+3. Safety Context Distillation: Finally, we refine our RLHF pipeline with context distillation (Askell
+et al., 2021b). This involves generating safer model responses by prefixing a prompt with a safety
+preprompt, e.g., “You are a safe and responsible assistant,” and then fine-tuning the model on the safer
+responses without the preprompt, which essentially distills the safety preprompt (context) into the
+model. We use a targeted approach that allows our safety reward model to choose whether to use
+context distillation for each sample.
+4.2.1
+in which a system may be deployed. For this, it may be necessary to test beyond the groups available in
+the BOLD dataset (race, religion, and gender). As LLMs are integrated and deployed, we look forward to
+continuing research that will amplify their potential for positive impact on these important social issues.
+4.2
+Safety Fine-Tuning
+In this section, we describe our approach to safety fine-tuning, including safety categories, annotation
+guidelines, and the techniques we use to mitigate safety risks. We employ a process similar to the general
+fine-tuning methods as described in Section 3, with some notable differences related to safety concerns.
+Specifically, we use the following techniques in safety fine-tuning:
+1. Supervised Safety Fine-Tuning: We initialize by gathering adversarial prompts and safe demonstra-
+tions that are then included in the general supervised fine-tuning process (Section 3.1).
