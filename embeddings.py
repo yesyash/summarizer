@@ -72,7 +72,7 @@ docs = text_splitter.split_documents(documents)
 db = FAISS.from_documents(docs, embeddings)
 db.save_local("test_faiss")
 
-query = "what is safety in pretraining?"
-docs = db.similarity_search(query)
+# query = "what is safety in pretraining?"
+# docs = db.similarity_search(query)
 
-print(docs[0].page_content)
+# print(docs[0].page_content)
