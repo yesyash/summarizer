@@ -31,7 +31,7 @@ if filename == '':
     filename = 'search-output.txt'
 
 if model == '':
-    model = "ollama2"
+    model = "llama2"
 
 # do a similartiy search from the databse
 docs = db.similarity_search(query)
